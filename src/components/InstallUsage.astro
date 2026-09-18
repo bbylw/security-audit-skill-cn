@@ -1,0 +1,43 @@
+---
+import { InstallTabs } from './react/InstallTabs';
+import { Reveal } from './react/Reveal';
+---
+
+<section id="install" class="border-y border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/40">
+  <div class="mx-auto max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6 lg:py-24">
+    <div class="grid gap-10 lg:grid-cols-2 lg:gap-14">
+      <Reveal client:visible>
+        <h2 class="text-3xl font-bold tracking-tighter md:text-4xl">安装与启动</h2>
+        <p class="mt-3 max-w-[60ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+          用 Skills CLI 一行安装。在编码智能体所在（或指向）的代码库中启动它，说一句话即可进入完整审计。
+        </p>
+        <div class="mt-6">
+          <InstallTabs client:visible />
+        </div>
+        <div class="mt-5 rounded-2xl border border-zinc-200 p-5 text-sm leading-relaxed dark:border-zinc-800">
+          <p class="font-semibold">输出目录规则</p>
+          <p class="mt-1.5 text-zinc-600 dark:text-zinc-400">未指定时默认 <code class="font-mono text-[13px] text-emerald-700 dark:text-emerald-300">~/security-audit-skill/&lt;repo-name&gt;/run-&lt;N&gt;</code>。只有当你显式选择被版本控制忽略的目录时，才会在目标仓库内写入文件。</p>
+        </div>
+      </Reveal>
+      <Reveal client:visible delay={0.08}>
+        <h3 class="text-xl font-bold tracking-tight">三种启动说法</h3>
+        <ul class="mt-4 space-y-3">
+          {[
+            ['security audit this codebase', '完整审计当前代码库'],
+            ['find security vulnerabilities in ./src', '聚焦 ./src 做漏洞搜寻'],
+            ['do a security review, output to ~/audits/my-project', '指定输出目录的评审'],
+          ].map(([cmd, desc]) => (
+            <li class="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-800">
+              <code class="font-mono text-[13px] text-zinc-900 dark:text-zinc-100">“{cmd}”</code>
+              <p class="mt-1 text-sm text-zinc-500">{desc}</p>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-4 rounded-2xl border border-emerald-600/25 bg-emerald-500/[0.06] p-5 text-sm leading-relaxed">
+          <p class="font-semibold">触发与模式</p>
+          <p class="mt-1.5 text-zinc-600 dark:text-zinc-400">命中 security audit、find vulnerabilities、pen-test the code 等触发词即自动激活。直接审计进入完整模式；安全咨询与聚焦排查进入指导模式，除非你明确要求报告产物。</p>
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,51 @@
+---
+import { Reveal } from './react/Reveal';
+import { ShieldCheck, Scales, Crosshair, Cube, Repeat } from '@phosphor-icons/react';
+
+const principles = [
+  { icon: Crosshair, t: '只确认已确证的边界失效', d: '有源码依据但受阻的线索保留为 needs_validation，并写明确切的未解决事实。' },
+  { icon: ShieldCheck, t: '对抗式验证', d: '检查某条发现的智能体，绝不可以是发现它的那个智能体。' },
+  { icon: Scales, t: '严重级别必须有影响力支撑', d: '严重度 = 可能性 × 影响，而不是对检查清单的偏离程度。' },
+  { icon: Cube, t: '纵深防御缺口不等于漏洞', d: '如果 A 层已阻止该攻击，缺少 B 层只是一条加固建议。' },
+  { icon: Repeat, t: '多次运行可提升覆盖率', d: '测试中单次运行约找出累计漏洞的一半；叠加账本与发现，瞄准遗漏并对变更源码重验。' },
+];
+---
+
+<section id="principles" class="mx-auto max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6 lg:py-24">
+  <div class="grid gap-10 lg:grid-cols-[1fr_1.2fr] lg:gap-14">
+    <Reveal client:visible>
+      <h2 class="text-3xl font-bold tracking-tighter md:text-4xl">运行要求与设计原则</h2>
+      <p class="mt-3 max-w-[60ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+        审计需要工具调用与并行子智能体、Node.js 运行校验器，以及操作系统强制约束的沙箱。
+      </p>
+      <ul class="mt-6 divide-y divide-zinc-200 rounded-2xl border border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+        {[
+          ['编码智能体', '支持工具调用与并行子智能体'],
+          ['Node.js', '运行零依赖的 findings 与 ledger 校验器'],
+          ['受约束沙箱', '禁用外部网络 · 白名单净化环境 · 资源限制 · 仅写指定临时路径'],
+        ].map(([k, v]) => (
+          <li class="flex flex-col gap-1 p-4 sm:flex-row sm:items-baseline sm:gap-4">
+            <span class="w-24 shrink-0 font-mono text-[13px] font-semibold text-emerald-700 dark:text-emerald-300">{k}</span>
+            <span class="text-sm text-zinc-600 dark:text-zinc-400">{v}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-4 rounded-xl border border-amber-500/25 bg-amber-500/[0.07] p-4 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        若缺少沙箱控制，工作流不会执行目标代码，只会把该线索保持为 needs_validation。
+      </p>
+    </Reveal>
+    <div>
+      <ol class="divide-y divide-zinc-200 border-t border-zinc-200 dark:divide-zinc-800 dark:border-zinc-800">
+        {principles.map((p, i) => (
+          <li class="flex gap-4 py-5">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-600/20 bg-emerald-500/[0.07] text-emerald-700 dark:text-emerald-300"><p.icon size={17} weight="bold" aria-hidden /></span>
+            <div>
+              <p class="font-semibold tracking-tight">{p.t} <span class="ml-1 font-mono text-xs text-zinc-400">0{i + 1}</span></p>
+              <p class="mt-1 max-w-[60ch] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">{p.d}</p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</section>

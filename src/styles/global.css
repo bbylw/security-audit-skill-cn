@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Shape rule (locked for whole page):
+   - buttons: full-pill (rounded-full)
+   - cards: 16px (rounded-2xl)
+   - inputs/code: 12px (rounded-xl)
+*/
+
+@theme {
+  --font-display: "Outfit", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --color-accent: #10b981;
+  --color-accent-strong: #059669;
+  --color-ink: #09090b;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: #10b981;
+  color: #022c22;
+}
+
+/* Single marquee on the page (attack-class ticker) */
+@keyframes ticker-x {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.ticker-track {
+  animation: ticker-x 36s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .ticker-track { animation: none; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus visibility */
+:where(a, button, input, [tabindex]):focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Code scrollbars */
+.code-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
+.code-scroll::-webkit-scrollbar-thumb { background: rgba(16,185,129,.35); border-radius: 99px; }
+.code-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* Grain overlay: fixed, pointer-events-none only */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

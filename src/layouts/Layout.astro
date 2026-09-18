@@ -1,0 +1,58 @@
+---
+import '../styles/global.css';
+import '@fontsource/outfit/400.css';
+import '@fontsource/outfit/500.css';
+import '@fontsource/outfit/600.css';
+import '@fontsource/outfit/700.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/500.css';
+import '@fontsource/noto-sans-sc/400.css';
+import '@fontsource/noto-sans-sc/500.css';
+import '@fontsource/noto-sans-sc/700.css';
+import '@fontsource/noto-sans-sc/900.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'security-audit 安全审计 — 让编码智能体化身安全审计员',
+  description = '面向 coding-agent 的安全审计技能：侦察、覆盖驱动搜寻、候选验证、结构化输出、独立核验与目标中立报告。六阶段、多智能体隔离协作。',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-CN" class="dark scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="theme-color" content="#09090b" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      try {
+        const saved = localStorage.getItem('sa-theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const dark = saved ? saved === 'dark' : true;
+        document.documentElement.classList.toggle('dark', dark);
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+      } catch {}
+    </script>
+  </head>
+  <body class="grain bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+    <slot />
+    <script is:inline>
+      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+        const el = document.documentElement;
+        const dark = !el.classList.contains('dark');
+        el.classList.toggle('dark', dark);
+        el.style.colorScheme = dark ? 'dark' : 'light';
+        try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch {}
+        const label = document.getElementById('theme-toggle-label');
+        if (label) label.textContent = dark ? '深色' : '浅色';
+      });
+    </script>
+  </body>
+</html>

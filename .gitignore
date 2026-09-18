@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+
+# preview / test artifacts
+.playwright-mcp/
+
+# env
+.env
+.env.*
+!.env.example
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.local

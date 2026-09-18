@@ -1,0 +1,16 @@
+---
+import { PhaseExplorer } from './react/PhaseExplorer';
+import { Reveal } from './react/Reveal';
+---
+
+<section id="workflow" class="mx-auto max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6 lg:py-24">
+  <Reveal client:visible>
+    <h2 class="max-w-3xl text-3xl font-bold tracking-tighter md:text-4xl">一次审计，六个阶段</h2>
+    <p class="mt-3 max-w-[65ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+      父智能体在建账后与每次账本更新后运行覆盖校验，第 4 阶段运行发现校验，第 5 阶段每次替换后再跑一遍。账本与发现可跨运行叠加复用。
+    </p>
+  </Reveal>
+  <div class="mt-8">
+    <PhaseExplorer client:visible />
+  </div>
+</section>
