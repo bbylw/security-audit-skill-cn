@@ -2,7 +2,7 @@
 import { Reveal } from './react/Reveal';
 ---
 
-<section id="verdicts" class="border-y border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/40">
+<section id="verdicts" class="scroll-mt-20 border-y border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/40">
   <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24">
     <Reveal client:visible>
       <h2 class="max-w-3xl text-3xl font-bold tracking-tighter md:text-4xl">三种判定，语义严格区分</h2>
@@ -27,14 +27,14 @@ import { Reveal } from './react/Reveal';
       <div class="grid gap-4">
         <Reveal client:visible delay={0.06}>
           <article class="h-full rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-800 dark:bg-zinc-950">
-            <p class="font-mono text-xs text-amber-600 dark:text-amber-300">needs_validation · 待验证</p>
+            <p class="font-mono text-xs text-amber-700 dark:text-amber-300">needs_validation · 待验证</p>
             <h3 class="mt-2 text-lg font-bold tracking-tight">确切但未解决的事实</h3>
             <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">有源码依据但受阻（如缺沙箱、缺网络隔离），不带严重级别，写入 NEEDS-VALIDATION.md。</p>
           </article>
         </Reveal>
         <Reveal client:visible delay={0.12}>
           <article class="h-full rounded-2xl border border-zinc-200 bg-zinc-50 p-6 dark:border-zinc-800 dark:bg-zinc-950">
-            <p class="font-mono text-xs text-zinc-500">rejected · 已排除</p>
+            <p class="font-mono text-xs text-zinc-500 dark:text-zinc-400">rejected · 已排除</p>
             <h3 class="mt-2 text-lg font-bold tracking-tight">已被证伪的候选</h3>
             <p class="mt-2 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">验证智能体给出反例或阻断证据，保留排除理由，避免重复派发。</p>
           </article>

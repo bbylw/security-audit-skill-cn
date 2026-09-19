@@ -9,9 +9,10 @@
 */
 
 @theme {
-  --font-display: "Outfit", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Outfit", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+  /* 中文走系统字体栈（不自托管，避免 20MB+ 产物）；Outfit/Mono 仅覆盖拉丁字符 */
+  --font-display: "Outfit", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Outfit", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", "PingFang SC", "Microsoft YaHei", ui-monospace, monospace;
   --color-accent: #10b981;
   --color-accent-strong: #059669;
   --color-ink: #09090b;
@@ -59,6 +60,7 @@ body {
 }
 
 /* Code scrollbars */
+.code-scroll { scrollbar-width: thin; scrollbar-color: rgba(16,185,129,.35) transparent; }
 .code-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
 .code-scroll::-webkit-scrollbar-thumb { background: rgba(16,185,129,.35); border-radius: 99px; }
 .code-scroll::-webkit-scrollbar-track { background: transparent; }

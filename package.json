@@ -12,7 +12,6 @@
   "dependencies": {
     "@astrojs/react": "^6.0.6",
     "@fontsource/jetbrains-mono": "^5.2.5",
-    "@fontsource/noto-sans-sc": "^5.2.5",
     "@fontsource/outfit": "^5.2.5",
     "@phosphor-icons/react": "^2.1.10",
     "astro": "^7.3.3",
@@ -27,6 +26,6 @@
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "bun-types": "latest",
-    "typescript": "^7.0.2"
+    "typescript": "^6.0.3"
   }
 }

@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { docFiles, type FileGroup } from "../../data/content";
 
 const TABS: { id: FileGroup | "all"; label: string }[] = [
-  { id: "all", label: "全部 20" },
+  { id: "all", label: "全部" },
   { id: "core", label: "核心流程" },
   { id: "hunt", label: "搜寻类" },
   { id: "ops", label: "校验工程" },
@@ -14,6 +14,8 @@ const GROUP_LABEL: Record<FileGroup, string> = {
   hunt: "搜寻类",
   ops: "校验工程",
 };
+
+const HUNT_COUNT = docFiles.filter((f) => f.group === "hunt").length;
 
 export function FileMatrix() {
   const [tab, setTab] = useState<FileGroup | "all">("all");
@@ -31,22 +33,25 @@ export function FileMatrix() {
   return (
     <div>
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="flex flex-wrap gap-2" role="tablist" aria-label="文件分组">
-          {TABS.map((t) => (
-            <button
-              key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
-              onClick={() => setTab(t.id)}
-              className={`rounded-full px-4 py-1.5 text-sm transition active:scale-[0.98] ${
-                tab === t.id
-                  ? "bg-emerald-600 text-white dark:bg-emerald-400 dark:text-emerald-950"
-                  : "border border-zinc-300 text-zinc-600 hover:border-emerald-500/50 dark:border-zinc-700 dark:text-zinc-300"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-2" role="group" aria-label="按分组筛选文件">
+          {TABS.map((t) => {
+            const pressed = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                aria-pressed={pressed}
+                onClick={() => setTab(t.id)}
+                className={`rounded-full px-4 py-1.5 text-sm transition active:scale-[0.98] ${
+                  pressed
+                    ? "bg-emerald-700 text-white dark:bg-emerald-400 dark:text-emerald-950"
+                    : "border border-zinc-300 text-zinc-600 hover:border-emerald-500/50 dark:border-zinc-700 dark:text-zinc-300"
+                }`}
+              >
+                {t.id === "all" ? `全部 ${docFiles.length}` : t.label}
+              </button>
+            );
+          })}
         </div>
         <label className="relative sm:ml-auto sm:w-64">
           <span className="sr-only">搜索文件</span>
@@ -54,7 +59,7 @@ export function FileMatrix() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="搜索，如 auth / rpc / ledger"
-            className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm outline-none placeholder:text-zinc-400 focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:placeholder:text-zinc-600"
+            className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm outline-none placeholder:text-zinc-500 focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:placeholder:text-zinc-400"
           />
         </label>
       </div>
@@ -62,7 +67,7 @@ export function FileMatrix() {
       {list.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-dashed border-zinc-300 p-10 text-center dark:border-zinc-700">
           <p className="font-medium">没有匹配的文件</p>
-          <p className="mt-1 text-sm text-zinc-500">换个关键词，或清空搜索再试。</p>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">换个关键词，或清空搜索再试。</p>
           <button
             type="button"
             onClick={() => { setQ(""); setTab("all"); }}
@@ -90,7 +95,7 @@ export function FileMatrix() {
           ))}
         </ul>
       )}
-      <p className="mt-4 font-mono text-xs text-zinc-500">共 {list.length} / {docFiles.length} 个文件 · 搜寻类覆盖 11 个攻击面家族</p>
+      <p className="mt-4 font-mono text-xs text-zinc-500 dark:text-zinc-400">共 {list.length} / {docFiles.length} 个文件 · 搜寻类覆盖 {HUNT_COUNT} 个攻击面家族</p>
     </div>
   );
 }

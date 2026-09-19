@@ -6,10 +6,6 @@ import '@fontsource/outfit/600.css';
 import '@fontsource/outfit/700.css';
 import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/500.css';
-import '@fontsource/noto-sans-sc/400.css';
-import '@fontsource/noto-sans-sc/500.css';
-import '@fontsource/noto-sans-sc/700.css';
-import '@fontsource/noto-sans-sc/900.css';
 
 interface Props {
   title?: string;
@@ -31,11 +27,12 @@ const {
     <meta name="theme-color" content="#09090b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
+    <noscript><style>[style*="opacity:0"]{opacity:1 !important;transform:none !important}.ticker-track{animation:none !important}</style></noscript>
     <script is:inline>
       try {
         const saved = localStorage.getItem('sa-theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        const dark = saved ? saved === 'dark' : true;
+        const dark = saved ? saved === 'dark' : prefersDark;
         document.documentElement.classList.toggle('dark', dark);
         document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
       } catch {}
@@ -44,14 +41,21 @@ const {
   <body class="grain bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
     <slot />
     <script is:inline>
-      document.getElementById('theme-toggle')?.addEventListener('click', () => {
+      const toggle = document.getElementById('theme-toggle');
+      const label = document.getElementById('theme-toggle-label');
+      const syncThemeLabel = () => {
+        const dark = document.documentElement.classList.contains('dark');
+        if (label) label.textContent = dark ? '深色' : '浅色';
+        if (toggle) toggle.setAttribute('aria-pressed', String(dark));
+      };
+      syncThemeLabel();
+      toggle?.addEventListener('click', () => {
         const el = document.documentElement;
         const dark = !el.classList.contains('dark');
         el.classList.toggle('dark', dark);
         el.style.colorScheme = dark ? 'dark' : 'light';
         try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch {}
-        const label = document.getElementById('theme-toggle-label');
-        if (label) label.textContent = dark ? '深色' : '浅色';
+        syncThemeLabel();
       });
     </script>
   </body>

@@ -1,7 +1,12 @@
 "use client";
+import { useEffect, useState, type ReactNode } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import type { ReactNode } from "react";
 
+/**
+ * 入场显现：默认可见（SSR / 无 JS / hydration 首帧均为普通 div），
+ * 挂载后才启用 motion 动画。`reduce` 只影响动画参数，不分支元素树，
+ * 避免 React 19 hydration mismatch。
+ */
 export function Reveal({
   children,
   delay = 0,
@@ -13,8 +18,13 @@ export function Reveal({
   y?: number;
   className?: string;
 }) {
+  const [mounted, setMounted] = useState(false);
   const reduce = useReducedMotion();
-  if (reduce) return <div className={className}>{children}</div>;
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted || reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div
       className={className}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
 
 const LINES = [
@@ -12,29 +12,48 @@ const LINES = [
   { text: "▸ 已派生 REPORT.md · FINDINGS-DETAIL.md · NEEDS-VALIDATION.md", cls: "text-zinc-400", pause: 0 },
 ];
 
+/**
+ * 演示终端：SSR 与 hydration 首帧渲染完整静态内容（无 JS 也可见），
+ * 挂载后才启动打字机。减弱动效偏好同样在 effect 中处理，
+ * 避免首帧元素树分叉导致 hydration mismatch。
+ * 容器不做 live region，避免逐行打断读屏；用 aria-busy 表达进行态。
+ */
 export function HeroTerminal() {
+  const [count, setCount] = useState(LINES.length);
+  const [playing, setPlaying] = useState(false);
   const reduce = useReducedMotion();
-  const [count, setCount] = useState(reduce ? LINES.length : 0);
+
+  // 首帧与 SSR 一致渲染完整静态内容；绘制前（useLayoutEffect，不影响 SSR）
+  // 再为动效用户重置并开播，避免闪烁与 hydration mismatch。
+  useLayoutEffect(() => {
+    if (reduce) return;
+    setCount(0);
+    setPlaying(true);
+  }, [reduce]);
 
   useEffect(() => {
-    if (reduce) return;
-    if (count >= LINES.length) return;
+    if (!playing || reduce) return;
+    if (count >= LINES.length) {
+      setPlaying(false);
+      return;
+    }
     const t = setTimeout(() => setCount((c) => c + 1), LINES[count]?.pause ?? 500);
     return () => clearTimeout(t);
-  }, [count, reduce]);
+  }, [count, playing, reduce]);
+
+  const done = count >= LINES.length;
 
   return (
     <div
-      role="log"
-      aria-live="polite"
       aria-label="安全审计运行演示终端"
+      aria-busy={playing}
       className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-[0_24px_80px_-24px_rgba(16,185,129,0.35)]"
     >
       <div className="flex items-center gap-2 border-b border-zinc-800/80 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-        <span className="ml-2 font-mono text-xs text-zinc-500">audit — coverage-led run</span>
+        <span className="ml-2 font-mono text-xs text-zinc-400">audit — coverage-led run</span>
         <span className="ml-auto hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 font-mono text-[11px] text-emerald-300 sm:flex">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
           ledger validated
@@ -47,12 +66,12 @@ export function HeroTerminal() {
             {i === 0 && count === 1 && <span className="ml-1 inline-block h-4 w-2 animate-pulse bg-emerald-400 align-middle" />}
           </p>
         ))}
-        {count < LINES.length && !reduce && (
-          <p className="text-zinc-600">
+        {playing && !done && (
+          <p className="text-zinc-400">
             <span className="inline-block h-4 w-2 animate-pulse bg-emerald-400 align-middle" />
           </p>
         )}
-        {count >= LINES.length && (
+        {done && (
           <div className="mt-4 grid grid-cols-3 gap-2 border-t border-zinc-800/80 pt-4 font-mono text-center">
             {[
               ["2", "confirmed"],
@@ -61,17 +80,17 @@ export function HeroTerminal() {
             ].map(([n, k]) => (
               <div key={k} className="rounded-xl bg-zinc-900 px-2 py-2.5">
                 <div className="text-lg font-semibold text-zinc-100">{n}</div>
-                <div className="truncate text-[11px] text-zinc-500">{k}</div>
+                <div className="truncate text-[11px] text-zinc-400">{k}</div>
               </div>
             ))}
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between border-t border-zinc-800/80 px-4 py-2.5 font-mono text-[11px] text-zinc-600">
+      <div className="flex items-center justify-between border-t border-zinc-800/80 px-4 py-2.5 font-mono text-[11px] text-zinc-400">
         <span>~/security-audit-skill/my-repo/run-3</span>
         <button
           type="button"
-          onClick={() => setCount(0)}
+          onClick={() => { setCount(0); setPlaying(true); }}
           className="rounded-full border border-zinc-800 px-2.5 py-1 text-zinc-400 transition hover:border-emerald-500/40 hover:text-emerald-300 active:scale-[0.98]"
         >
           重播

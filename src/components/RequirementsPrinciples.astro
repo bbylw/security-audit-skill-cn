@@ -1,13 +1,13 @@
 ---
 import { Reveal } from './react/Reveal';
-import { ShieldCheck, Scales, Crosshair, Cube, Repeat } from '@phosphor-icons/react';
+import { ShieldCheckIcon, ScalesIcon, CrosshairIcon, CubeIcon, RepeatIcon } from '@phosphor-icons/react';
 
 const principles = [
-  { icon: Crosshair, t: '只确认已确证的边界失效', d: '有源码依据但受阻的线索保留为 needs_validation，并写明确切的未解决事实。' },
-  { icon: ShieldCheck, t: '对抗式验证', d: '检查某条发现的智能体，绝不可以是发现它的那个智能体。' },
-  { icon: Scales, t: '严重级别必须有影响力支撑', d: '严重度 = 可能性 × 影响，而不是对检查清单的偏离程度。' },
-  { icon: Cube, t: '纵深防御缺口不等于漏洞', d: '如果 A 层已阻止该攻击，缺少 B 层只是一条加固建议。' },
-  { icon: Repeat, t: '多次运行可提升覆盖率', d: '测试中单次运行约找出累计漏洞的一半；叠加账本与发现，瞄准遗漏并对变更源码重验。' },
+  { icon: CrosshairIcon, t: '只确认已确证的边界失效', d: '有源码依据但受阻的线索保留为 needs_validation，并写明确切的未解决事实。' },
+  { icon: ShieldCheckIcon, t: '对抗式验证', d: '检查某条发现的智能体，绝不可以是发现它的那个智能体。' },
+  { icon: ScalesIcon, t: '严重级别必须有影响力支撑', d: '严重度 = 可能性 × 影响，而不是对检查清单的偏离程度。' },
+  { icon: CubeIcon, t: '纵深防御缺口不等于漏洞', d: '如果 A 层已阻止该攻击，缺少 B 层只是一条加固建议。' },
+  { icon: RepeatIcon, t: '多次运行可提升覆盖率', d: '测试中单次运行约找出累计漏洞的一半；叠加账本与发现，瞄准遗漏并对变更源码重验。' },
 ];
 ---
 
