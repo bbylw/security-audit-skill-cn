@@ -14,18 +14,21 @@ const LINES = [
 ];
 
 /**
- * 演示终端：SSR 与无 JS 时保持空壳（容器高度按终态预留，不产生布局跳动），
- * 挂载后在首次绘制前启动打字机，避免「先渲染完整记录、再清空重打」的倒退。
+ * 演示终端：SSR 与无 JS 时预先展示前四条记录，避免首屏出现空终端；
+ * 挂载后继续播放余下步骤，容器高度按终态预留，不产生布局跳动。
  * 容器不做 live region，避免逐行打断读屏；用 aria-busy 表达进行态。
  */
 export function HeroTerminal() {
-  const [count, setCount] = useState(0);
-  const [playing, setPlaying] = useState(false);
+  // 首屏先展示足够的信息密度，再继续演示余下步骤，避免慢设备或截图中出现空终端。
+  const [count, setCount] = useState(4);
+  const [playing, setPlaying] = useState(true);
   const reduce = useReducedMotion();
 
   useIsoLayoutEffect(() => {
-    if (reduce) setCount(LINES.length);
-    else setPlaying(true);
+    if (reduce) {
+      setCount(LINES.length);
+      setPlaying(false);
+    }
   }, [reduce]);
 
   useEffect(() => {
@@ -53,10 +56,10 @@ export function HeroTerminal() {
         <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-        <span className="ml-2 font-mono text-xs text-zinc-400">audit — coverage-led run</span>
+        <span className="ml-2 font-mono text-xs text-zinc-300">audit / coverage-led run</span>
         <span className="ml-auto hidden items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 font-mono text-[11px] text-emerald-300 sm:flex">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-          ledger validated
+          <span className={`h-1.5 w-1.5 rounded-full bg-emerald-400 ${playing ? "animate-pulse" : ""}`} />
+          {done ? "audit complete" : "agents running"}
         </span>
       </div>
       <div className="code-scroll min-h-[352px] space-y-2.5 overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
@@ -86,12 +89,12 @@ export function HeroTerminal() {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between border-t border-zinc-800/80 px-4 py-2.5 font-mono text-[11px] text-zinc-400">
+      <div className="flex items-center justify-between border-t border-zinc-800/80 bg-zinc-900/35 px-4 py-2.5 font-mono text-[11px] text-zinc-300">
         <span>~/security-audit-skill/my-repo/run-3</span>
         <button
           type="button"
           onClick={() => { setCount(0); setPlaying(true); }}
-          className="rounded-full border border-zinc-800 px-2.5 py-1 text-zinc-400 transition hover:border-emerald-500/40 hover:text-emerald-300 active:scale-[0.98]"
+          className="rounded-full border border-zinc-700 px-2.5 py-1 text-zinc-300 transition hover:border-emerald-500/50 hover:text-emerald-300 active:scale-[0.98]"
         >
           重播
         </button>

@@ -19,7 +19,7 @@ interface Props {
 }
 
 const {
-  title = 'security-audit 安全审计 — 让编码智能体化身安全审计员',
+  title = 'security-audit 安全审计：让编码智能体化身安全审计员',
   description = '面向 coding-agent 的安全审计技能：侦察、覆盖驱动搜寻、候选验证、结构化输出、独立核验与目标中立报告。六阶段、多智能体隔离协作。',
   noindex = false,
 } = Astro.props;
@@ -78,7 +78,7 @@ const ogImage = new URL('og.png', Astro.site).href;
       const meta = document.querySelector('meta[name="theme-color"]');
       const syncTheme = () => {
         const dark = document.documentElement.classList.contains('dark');
-        if (label) label.textContent = dark ? '深色' : '浅色';
+        if (label) label.textContent = dark ? '深色模式' : '浅色模式';
         if (toggle) toggle.setAttribute('aria-pressed', String(dark));
         if (meta) meta.setAttribute('content', dark ? '#09090b' : '#fafafa');
       };

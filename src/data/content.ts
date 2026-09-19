@@ -125,7 +125,7 @@ export const docFiles: DocFile[] = [
   { name: 'report-schema.json', group: 'ops', use: '三类别判定 Schema', detail: 'findings.json 的结构化约束。' },
   { name: 'validate-findings.cjs', group: 'ops', use: '第 4、5 阶段校验器', detail: '零依赖，校验 findings.json。' },
   { name: 'validate-findings.test.cjs', group: 'ops', use: '校验器测试', detail: '兼容生产端的夹具检查。' },
-  { name: 'validate-coverage-ledger.cjs', group: 'ops', use: '第 1–5 阶段校验器', detail: '零依赖，校验 coverage-ledger.json。' },
+  { name: 'validate-coverage-ledger.cjs', group: 'ops', use: '第 1-5 阶段校验器', detail: '零依赖，校验 coverage-ledger.json。' },
   { name: 'validate-coverage-ledger.test.cjs', group: 'ops', use: '账本校验器测试', detail: '覆盖账本的结构与一致性测试。' },
 ];
 
