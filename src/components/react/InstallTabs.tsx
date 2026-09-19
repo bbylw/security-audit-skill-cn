@@ -56,7 +56,7 @@ export function InstallTabs() {
 
   return (
     <div className="overflow-hidden rounded-2xl border border-zinc-950 bg-zinc-950 shadow-[0_24px_60px_-24px_rgb(16_185_129/0.4)] dark:border-zinc-800">
-      <div className="flex items-center gap-2 border-b border-zinc-800/80 px-4 py-3" role="tablist" aria-label="安装方式" onKeyDown={onKeyDown}>
+      <div className="code-scroll flex items-center gap-2 overflow-x-auto border-b border-zinc-800/80 px-4 py-3" role="tablist" aria-label="安装方式" onKeyDown={onKeyDown}>
         <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
         <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
@@ -72,7 +72,7 @@ export function InstallTabs() {
               aria-controls="install-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => { setId(s.id); setCopied("idle"); }}
-              className={`ml-1 hidden rounded-full px-3 py-1 font-mono text-xs transition active:scale-[0.98] first:ml-2 sm:inline ${
+              className={`ml-1 shrink-0 rounded-full px-3 py-1 font-mono text-xs transition active:scale-[0.98] first:ml-2 ${
                 selected
                   ? "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40"
                   : "text-zinc-400 hover:text-zinc-100"
@@ -82,7 +82,7 @@ export function InstallTabs() {
             </button>
           );
         })}
-        <span className="ml-auto font-mono text-[11px] text-zinc-500">{active.label}</span>
+        <span className="ml-auto hidden shrink-0 font-mono text-[11px] text-zinc-500 sm:inline">{active.label}</span>
       </div>
       <div id="install-panel" role="tabpanel" aria-labelledby={`install-tab-${active.id}`} className="code-scroll overflow-x-auto p-5">
         <pre className="font-mono text-[13px] leading-relaxed"><code>

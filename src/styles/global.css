@@ -89,8 +89,12 @@ html::-webkit-scrollbar-track { background: transparent; }
   transform: scaleX(0);
 }
 @supports (animation-timeline: scroll()) {
+  /* 必须用长属性：Lightning CSS 会把 animation + animation-timeline 合并成
+     含 <timeline> 的 shorthand，而 Chrome 解析该 shorthand 会整条丢弃 */
   .scroll-progress {
-    animation: progress-grow linear both;
+    animation-name: progress-grow;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
     animation-timeline: scroll(root);
   }
 }
@@ -121,7 +125,7 @@ html::-webkit-scrollbar-track { background: transparent; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .ticker-track { animation: none; }
-  .scroll-progress { transform: none; }
+  .scroll-progress { animation: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;

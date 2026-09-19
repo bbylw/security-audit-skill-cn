@@ -110,7 +110,7 @@ export const docFiles: DocFile[] = [
   { name: 'SKILL.md', group: 'core', use: '安装配置 · 核心原则 · 工作流概览', detail: '审计反模式与平台术语，智能体的入口契约。' },
   { name: 'RECONNAISSANCE.md', group: 'core', use: '第 1 阶段侦察提示词', detail: '如何产出 architecture.md 与 coverage-ledger.json。' },
   { name: 'HUNTING.md', group: 'core', use: '第 2 阶段编排与验证规则', detail: '搜寻方法论、隔离要求与覆盖审查。' },
-  { name: 'VALIDATION-AND-REPORTING.md', group: 'core', use: '第 3-6 阶段验证与报告', detail: '候选验证、结构化输出、核验与三份报告派生。' },
+  { name: 'VALIDATION-AND-REPORTING.md', group: 'core', use: '第 3–6 阶段验证与报告', detail: '候选验证、结构化输出、核验与三份报告派生。' },
   { name: 'ATTACK-CLASSES.md', group: 'hunt', use: '核心 / 通配 / 显而易见类', detail: '通用攻击提示词基座。' },
   { name: 'MEMORY-SAFETY-AND-BINARY.md', group: 'hunt', use: '原生目标', detail: '内存安全、二进制与内核搜寻类。' },
   { name: 'AI-AND-LLM.md', group: 'hunt', use: 'LLM 支撑目标', detail: '提示注入、智能体 / 工具、输出处理。' },
@@ -125,7 +125,7 @@ export const docFiles: DocFile[] = [
   { name: 'report-schema.json', group: 'ops', use: '三类别判定 Schema', detail: 'findings.json 的结构化约束。' },
   { name: 'validate-findings.cjs', group: 'ops', use: '第 4、5 阶段校验器', detail: '零依赖，校验 findings.json。' },
   { name: 'validate-findings.test.cjs', group: 'ops', use: '校验器测试', detail: '兼容生产端的夹具检查。' },
-  { name: 'validate-coverage-ledger.cjs', group: 'ops', use: '第 1-5 阶段校验器', detail: '零依赖，校验 coverage-ledger.json。' },
+  { name: 'validate-coverage-ledger.cjs', group: 'ops', use: '第 1–5 阶段校验器', detail: '零依赖，校验 coverage-ledger.json。' },
   { name: 'validate-coverage-ledger.test.cjs', group: 'ops', use: '账本校验器测试', detail: '覆盖账本的结构与一致性测试。' },
 ];
 
