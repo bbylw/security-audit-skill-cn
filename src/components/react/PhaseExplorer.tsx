@@ -126,7 +126,7 @@ export function PhaseExplorer() {
           </div>
         )}
         <div className="relative mt-6 flex items-center justify-between border-t border-zinc-200 pt-4 dark:border-zinc-800">
-          <span aria-label={`第 ${index + 1} 阶段，共 ${phases.length} 阶段`} className="flex items-center gap-1.5">
+          <span role="group" aria-label={`第 ${index + 1} 阶段，共 ${phases.length} 阶段`} className="flex items-center gap-1.5">
             {phases.map((p, i) => (
               <span
                 key={p.id}
