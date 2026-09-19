@@ -1,11 +1,16 @@
 ---
 import '../styles/global.css';
-import '@fontsource/outfit/400.css';
-import '@fontsource/outfit/500.css';
-import '@fontsource/outfit/600.css';
-import '@fontsource/outfit/700.css';
-import '@fontsource/jetbrains-mono/400.css';
-import '@fontsource/jetbrains-mono/500.css';
+// 只引 latin 子集：站点正文中文走系统字体栈，西里尔/希腊/越南等子集纯属冗余产物
+import '@fontsource/outfit/latin-400.css';
+import '@fontsource/outfit/latin-500.css';
+import '@fontsource/outfit/latin-600.css';
+import '@fontsource/outfit/latin-700.css';
+import '@fontsource/jetbrains-mono/latin-400.css';
+import '@fontsource/jetbrains-mono/latin-500.css';
+// 关键字体预加载：URL 与 fontsource CSS 内引用同源同哈希，避免首屏文字回退闪烁
+import outfitLatin400 from '@fontsource/outfit/files/outfit-latin-400-normal.woff2';
+import outfitLatin700 from '@fontsource/outfit/files/outfit-latin-700-normal.woff2';
+import monoLatin400 from '@fontsource/jetbrains-mono/files/jetbrains-mono-latin-400-normal.woff2';
 
 interface Props {
   title?: string;
@@ -20,10 +25,11 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL('og.png', Astro.site).href;
 ---
 
 <!doctype html>
-<html lang="zh-CN" class="dark scroll-smooth">
+<html lang="zh-CN" class="dark">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,11 +43,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
-    <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="theme-color" content="#09090b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={outfitLatin400} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={outfitLatin700} />
+    <link rel="preload" as="font" type="font/woff2" crossorigin href={monoLatin400} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="security-audit 安全审计：六阶段、多智能体隔离协作的编码智能体安全审计技能" />
+    <meta name="twitter:card" content="summary_large_image" />
     <noscript><style>[style*="opacity:0"]{opacity:1 !important;transform:none !important}.ticker-track{animation:none !important}</style></noscript>
     <script is:inline>
       try {

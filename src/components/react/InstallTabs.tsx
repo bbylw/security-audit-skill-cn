@@ -3,15 +3,15 @@ import { useRef, useState } from "react";
 
 const SNIPPETS = [
   {
-    id: "user",
-    label: "用户级安装",
+    id: "project",
+    label: "项目级安装",
     hint: "写入当前项目 skills 目录",
     cmd: "npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit",
   },
   {
     id: "global",
-    label: "全局安装",
-    hint: "写入用户级 skills 目录",
+    label: "用户级安装",
+    hint: "加 --global，写入用户级 skills 目录",
     cmd: "npx skills add https://github.com/cloudflare/security-audit-skill --skill security-audit --global",
   },
   {
@@ -23,8 +23,8 @@ const SNIPPETS = [
 ] as const;
 
 export function InstallTabs() {
-  const [id, setId] = useState<string>("user");
-  const [copied, setCopied] = useState(false);
+  const [id, setId] = useState<string>("project");
+  const [copied, setCopied] = useState<"idle" | "ok" | "fail">("idle");
   const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const index = SNIPPETS.findIndex((s) => s.id === id);
   const active = SNIPPETS[index] ?? SNIPPETS[0];
@@ -38,7 +38,7 @@ export function InstallTabs() {
     if (next !== null) {
       e.preventDefault();
       setId(SNIPPETS[next].id);
-      setCopied(false);
+      setCopied("idle");
       tabRefs.current[next]?.focus();
     }
   };
@@ -46,11 +46,11 @@ export function InstallTabs() {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(active.cmd);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1600);
+      setCopied("ok");
     } catch {
-      setCopied(false);
+      setCopied("fail");
     }
+    setTimeout(() => setCopied("idle"), 1600);
   };
 
   return (
@@ -67,7 +67,7 @@ export function InstallTabs() {
               aria-selected={selected}
               aria-controls="install-panel"
               tabIndex={selected ? 0 : -1}
-              onClick={() => { setId(s.id); setCopied(false); }}
+              onClick={() => { setId(s.id); setCopied("idle"); }}
               className={`rounded-full px-4 py-1.5 font-mono text-[13px] transition active:scale-[0.98] ${
                 selected
                   ? "bg-zinc-900 text-white dark:bg-emerald-400 dark:text-emerald-950"
@@ -90,9 +90,13 @@ export function InstallTabs() {
           type="button"
           onClick={copy}
           aria-live="polite"
-          className="rounded-full bg-emerald-700 px-4 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-800 active:scale-[0.98] dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300"
+          className={`rounded-full px-4 py-1.5 text-sm font-medium transition active:scale-[0.98] ${
+            copied === "fail"
+              ? "bg-amber-600 text-white dark:bg-amber-400 dark:text-amber-950"
+              : "bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300"
+          }`}
         >
-          {copied ? "已复制" : "复制命令"}
+          {copied === "ok" ? "已复制" : copied === "fail" ? "复制失败，请手动选择" : "复制命令"}
         </button>
       </div>
     </div>
