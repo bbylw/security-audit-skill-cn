@@ -4,7 +4,7 @@ import { tickerItems } from '../data/content';
 
 <div aria-hidden="true" class="overflow-hidden border-b border-zinc-200 py-3 dark:border-zinc-800">
   <div class="ticker-track flex w-max gap-8 whitespace-nowrap font-mono text-[13px] text-zinc-500 dark:text-zinc-400">
-    {[...tickerItems, ...tickerItems].map((t, i) => (
+    {[...tickerItems, ...tickerItems].map((t) => (
       <span class="flex items-center gap-8">
         <span>{t}</span>
         <span class="h-1 w-1 rounded-full bg-emerald-500" />

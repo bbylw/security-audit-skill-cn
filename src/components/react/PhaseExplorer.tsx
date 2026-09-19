@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { phases, type Phase } from "../../data/content";
+import { useIsoLayoutEffect } from "./use-iso-layout-effect";
 
 function PanelBody({ current }: { current: Phase }) {
   return (
@@ -35,7 +36,7 @@ export function PhaseExplorer() {
   const index = phases.findIndex((p) => p.id === active);
   const current = phases[index] ?? phases[0];
 
-  useEffect(() => {
+  useIsoLayoutEffect(() => {
     setMounted(true);
   }, []);
 
@@ -77,14 +78,14 @@ export function PhaseExplorer() {
             >
               <span
                 className={`font-mono text-xs font-semibold ${
-                  selected ? "text-emerald-700 dark:text-emerald-300" : "text-zinc-400"
+                  selected ? "text-emerald-700 dark:text-emerald-300" : "text-zinc-500 dark:text-zinc-400"
                 }`}
               >
                 {p.no}
               </span>
               <span>
                 <span className="block text-sm font-semibold">{p.title}</span>
-                <span className="block font-mono text-[11px] text-zinc-500 dark:text-zinc-400">{p.en}</span>
+                <span className={`block font-mono text-[11px] ${selected ? "text-zinc-600 dark:text-zinc-300" : "text-zinc-500 dark:text-zinc-400"}`}>{p.en}</span>
               </span>
               <span
                 aria-hidden="true"

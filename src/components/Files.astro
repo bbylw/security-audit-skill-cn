@@ -2,14 +2,16 @@
 import { FileMatrix } from './react/FileMatrix';
 import { Reveal } from './react/Reveal';
 import { docFiles } from '../data/content';
+
+const huntCount = docFiles.filter((f) => f.group === 'hunt').length;
 ---
 
 <section id="files" class="mx-auto max-w-7xl scroll-mt-20 px-4 py-16 sm:px-6 lg:py-24">
   <Reveal client:visible>
     <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">File map · 文件清单</p>
-        <h2 class="mt-2 max-w-3xl text-3xl font-bold tracking-tighter md:text-4xl">{docFiles.length} 个文件，三组职责</h2>
+    <h2 class="mt-2 max-w-3xl text-3xl font-bold tracking-tighter md:text-4xl">{docFiles.length} 个文件，三组职责</h2>
     <p class="mt-3 max-w-[65ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
-      核心流程定契约，11 个搜寻类覆盖从内存安全到本地 IPC 的攻击面，校验工程用零依赖脚本锁住结构。先按分组浏览，再用搜索定位。
+      核心流程定契约，{huntCount} 个搜寻类覆盖从内存安全到本地 IPC 的攻击面，校验工程用零依赖脚本锁住结构。先按分组浏览，再用搜索定位。
     </p>
   </Reveal>
   <div class="mt-8">

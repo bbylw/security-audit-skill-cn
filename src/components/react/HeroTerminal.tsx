@@ -1,6 +1,7 @@
 "use client";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useReducedMotion } from "motion/react";
+import { useIsoLayoutEffect } from "./use-iso-layout-effect";
 
 const LINES = [
   { text: "$ security audit this codebase", cls: "text-emerald-400", pause: 700 },
@@ -13,22 +14,18 @@ const LINES = [
 ];
 
 /**
- * 演示终端：SSR 与 hydration 首帧渲染完整静态内容（无 JS 也可见），
- * 挂载后才启动打字机。减弱动效偏好同样在 effect 中处理，
- * 避免首帧元素树分叉导致 hydration mismatch。
+ * 演示终端：SSR 与无 JS 时保持空壳（容器高度按终态预留，不产生布局跳动），
+ * 挂载后在首次绘制前启动打字机，避免「先渲染完整记录、再清空重打」的倒退。
  * 容器不做 live region，避免逐行打断读屏；用 aria-busy 表达进行态。
  */
 export function HeroTerminal() {
-  const [count, setCount] = useState(LINES.length);
+  const [count, setCount] = useState(0);
   const [playing, setPlaying] = useState(false);
   const reduce = useReducedMotion();
 
-  // 首帧与 SSR 一致渲染完整静态内容；绘制前（useLayoutEffect，不影响 SSR）
-  // 再为动效用户重置并开播，避免闪烁与 hydration mismatch。
-  useLayoutEffect(() => {
-    if (reduce) return;
-    setCount(0);
-    setPlaying(true);
+  useIsoLayoutEffect(() => {
+    if (reduce) setCount(LINES.length);
+    else setPlaying(true);
   }, [reduce]);
 
   useEffect(() => {
@@ -37,7 +34,9 @@ export function HeroTerminal() {
       setPlaying(false);
       return;
     }
-    const t = setTimeout(() => setCount((c) => c + 1), LINES[count]?.pause ?? 500);
+    // 首行尽快出现，其余按各行 pause 推进
+    const delay = count === 0 ? 160 : (LINES[count]?.pause ?? 500);
+    const t = setTimeout(() => setCount((c) => c + 1), delay);
     return () => clearTimeout(t);
   }, [count, playing, reduce]);
 
@@ -45,6 +44,7 @@ export function HeroTerminal() {
 
   return (
     <div
+      role="group"
       aria-label="安全审计运行演示终端"
       aria-busy={playing}
       className="overflow-hidden rounded-2xl border border-zinc-800 bg-zinc-950 shadow-[0_24px_80px_-24px_rgba(16,185,129,0.35)]"
@@ -59,7 +59,7 @@ export function HeroTerminal() {
           ledger validated
         </span>
       </div>
-      <div className="code-scroll min-h-[264px] space-y-2.5 overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
+      <div className="code-scroll min-h-[352px] space-y-2.5 overflow-x-auto p-5 font-mono text-[13px] leading-relaxed">
         {LINES.slice(0, count).map((l, i) => (
           <p key={i} className={l.cls}>
             {l.text}

@@ -81,7 +81,7 @@ export function FileMatrix() {
           {list.map((f) => (
             <li
               key={f.name}
-              className="group rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-500/40 dark:border-zinc-800 dark:bg-zinc-900/60"
+              className="group min-w-0 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-500/40 dark:border-zinc-800 dark:bg-zinc-900/60"
             >
               <div className="flex items-center gap-2">
                 <span className="rounded-full border border-emerald-600/25 bg-emerald-500/10 px-2 py-0.5 font-mono text-[11px] text-emerald-700 dark:text-emerald-300">

@@ -81,7 +81,7 @@ export function InstallTabs() {
       </div>
       <div id="install-panel" role="tabpanel" aria-labelledby={`install-tab-${active.id}`} className="code-scroll overflow-x-auto p-5">
         <pre className="font-mono text-[13px] leading-relaxed"><code>
-          <span className="text-zinc-400">$ </span><span className="text-zinc-900 dark:text-zinc-100">{active.cmd}</span>
+          <span className="text-zinc-500 dark:text-zinc-400">$ </span><span className="text-zinc-900 dark:text-zinc-100">{active.cmd}</span>
         </code></pre>
       </div>
       <div className="flex items-center justify-between border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">

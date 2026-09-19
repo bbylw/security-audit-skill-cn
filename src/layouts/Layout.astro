@@ -10,12 +10,16 @@ import '@fontsource/jetbrains-mono/500.css';
 interface Props {
   title?: string;
   description?: string;
+  noindex?: boolean;
 }
 
 const {
   title = 'security-audit 安全审计 — 让编码智能体化身安全审计员',
   description = '面向 coding-agent 的安全审计技能：侦察、覆盖驱动搜寻、候选验证、结构化输出、独立核验与目标中立报告。六阶段、多智能体隔离协作。',
+  noindex = false,
 } = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -23,10 +27,21 @@ const {
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="security-audit 安全审计" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <meta name="theme-color" content="#09090b" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>{title}</title>
     <noscript><style>[style*="opacity:0"]{opacity:1 !important;transform:none !important}.ticker-track{animation:none !important}</style></noscript>
     <script is:inline>
       try {
@@ -35,6 +50,8 @@ const {
         const dark = saved ? saved === 'dark' : prefersDark;
         document.documentElement.classList.toggle('dark', dark);
         document.documentElement.style.colorScheme = dark ? 'dark' : 'light';
+        const meta = document.querySelector('meta[name="theme-color"]');
+        if (meta) meta.setAttribute('content', dark ? '#09090b' : '#fafafa');
       } catch {}
     </script>
   </head>
@@ -43,19 +60,21 @@ const {
     <script is:inline>
       const toggle = document.getElementById('theme-toggle');
       const label = document.getElementById('theme-toggle-label');
-      const syncThemeLabel = () => {
+      const meta = document.querySelector('meta[name="theme-color"]');
+      const syncTheme = () => {
         const dark = document.documentElement.classList.contains('dark');
         if (label) label.textContent = dark ? '深色' : '浅色';
         if (toggle) toggle.setAttribute('aria-pressed', String(dark));
+        if (meta) meta.setAttribute('content', dark ? '#09090b' : '#fafafa');
       };
-      syncThemeLabel();
+      syncTheme();
       toggle?.addEventListener('click', () => {
         const el = document.documentElement;
         const dark = !el.classList.contains('dark');
         el.classList.toggle('dark', dark);
         el.style.colorScheme = dark ? 'dark' : 'light';
         try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch {}
-        syncThemeLabel();
+        syncTheme();
       });
     </script>
   </body>
