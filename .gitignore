@@ -7,6 +7,7 @@ dist/
 
 # preview / test artifacts
 .playwright-mcp/
+.amp/
 
 # env
 .env
