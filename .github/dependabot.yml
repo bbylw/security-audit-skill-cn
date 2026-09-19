@@ -1,0 +1,11 @@
+# 只托管 GitHub Actions 的版本更新，避免以后再出现「Action 落后好几个大版本」。
+# 注意：这里故意不开 npm 生态——本项目用 bun，Dependabot 的 npm 更新只会改 package.json
+# 而不会同步 bun.lock，会导致 CI 的 --frozen-lockfile 直接失败。
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: chore
