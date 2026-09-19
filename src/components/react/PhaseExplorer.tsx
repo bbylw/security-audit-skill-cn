@@ -57,7 +57,8 @@ export function PhaseExplorer() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[320px_1fr]">
-      <div role="tablist" aria-label="六个审计阶段" onKeyDown={onKeyDown} className="flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:overflow-visible lg:pb-0">
+      <div role="tablist" aria-label="六个审计阶段" onKeyDown={onKeyDown} className="relative flex gap-2 overflow-x-auto pb-1 lg:flex-col lg:gap-3 lg:overflow-visible lg:pb-0">
+        <span aria-hidden="true" className="pointer-events-none absolute left-[27px] top-6 bottom-6 hidden w-px bg-gradient-to-b from-emerald-500/50 via-zinc-300 to-transparent lg:block dark:via-zinc-700"></span>
         {phases.map((p, i) => {
           const selected = p.id === active;
           return (
@@ -70,9 +71,9 @@ export function PhaseExplorer() {
               aria-controls="phase-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => setActive(p.id)}
-              className={`group flex min-w-[220px] items-center gap-3 rounded-2xl border p-3.5 text-left transition active:scale-[0.98] lg:min-w-0 ${
+              className={`group relative flex min-w-[220px] items-center gap-3 rounded-2xl border p-3.5 text-left transition active:scale-[0.98] lg:min-w-0 ${
                 selected
-                  ? "border-emerald-500/50 bg-emerald-500/[0.08] dark:bg-emerald-400/[0.08]"
+                  ? "border-emerald-500/50 bg-emerald-500/[0.08] shadow-[0_10px_32px_-14px_rgb(16_185_129/0.45)] dark:bg-emerald-400/[0.08]"
                   : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900/60 dark:hover:border-zinc-700"
               }`}
             >
@@ -102,10 +103,15 @@ export function PhaseExplorer() {
         aria-labelledby={`phase-tab-${current.id}`}
         className="relative overflow-hidden rounded-2xl border border-zinc-200 bg-white p-6 sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/60"
       >
+        <span aria-hidden="true" className="pointer-events-none absolute -right-3 -top-7 select-none font-mono text-[140px] font-bold leading-none text-zinc-950/[0.04] dark:text-zinc-100/[0.05]">
+          {current.no}
+        </span>
+        <div aria-hidden="true" className="glow-emerald pointer-events-none absolute -right-20 -top-20 h-64 w-64"></div>
         {animate ? (
           <AnimatePresence mode="wait">
             <motion.div
               key={current.id}
+              className="relative"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
@@ -115,13 +121,22 @@ export function PhaseExplorer() {
             </motion.div>
           </AnimatePresence>
         ) : (
-          <div>
+          <div className="relative">
             <PanelBody current={current} />
           </div>
         )}
-        <div className="mt-6 flex items-center justify-between border-t border-zinc-200 pt-4 dark:border-zinc-800">
-          <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
-            {index + 1} / {phases.length}
+        <div className="relative mt-6 flex items-center justify-between border-t border-zinc-200 pt-4 dark:border-zinc-800">
+          <span aria-label={`第 ${index + 1} 阶段，共 ${phases.length} 阶段`} className="flex items-center gap-1.5">
+            {phases.map((p, i) => (
+              <span
+                key={p.id}
+                aria-hidden="true"
+                className={`h-1.5 rounded-full transition-all duration-300 ${i === index ? "w-6 bg-emerald-500" : "w-1.5 bg-zinc-300 dark:bg-zinc-700"}`}
+              />
+            ))}
+            <span className="ml-2 font-mono text-xs text-zinc-500 dark:text-zinc-400">
+              {index + 1} / {phases.length}
+            </span>
           </span>
           <div className="flex gap-2">
             <button

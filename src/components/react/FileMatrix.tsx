@@ -1,5 +1,6 @@
 "use client";
 import { useMemo, useState } from "react";
+import { FileCodeIcon, FileJsIcon, BracketsCurlyIcon, MagnifyingGlassIcon, FileTextIcon } from "@phosphor-icons/react";
 import { docFiles, type FileGroup } from "../../data/content";
 
 const TABS: { id: FileGroup | "all"; label: string }[] = [
@@ -14,6 +15,14 @@ const GROUP_LABEL: Record<FileGroup, string> = {
   hunt: "搜寻类",
   ops: "校验工程",
 };
+
+function FileIcon({ name }: { name: string }) {
+  const cls = "shrink-0 text-emerald-600 dark:text-emerald-400";
+  if (name.endsWith(".cjs")) return <FileJsIcon size={16} weight="bold" className={cls} aria-hidden />;
+  if (name.endsWith(".json")) return <BracketsCurlyIcon size={16} weight="bold" className={cls} aria-hidden />;
+  if (name.endsWith(".md")) return <FileTextIcon size={16} weight="bold" className={cls} aria-hidden />;
+  return <FileCodeIcon size={16} weight="bold" className={cls} aria-hidden />;
+}
 
 const HUNT_COUNT = docFiles.filter((f) => f.group === "hunt").length;
 
@@ -44,8 +53,8 @@ export function FileMatrix() {
                 onClick={() => setTab(t.id)}
                 className={`rounded-full px-4 py-1.5 text-sm transition active:scale-[0.98] ${
                   pressed
-                    ? "bg-emerald-700 text-white dark:bg-emerald-400 dark:text-emerald-950"
-                    : "border border-zinc-300 text-zinc-600 hover:border-emerald-500/50 dark:border-zinc-700 dark:text-zinc-300"
+                    ? "bg-emerald-700 text-white shadow-[0_8px_24px_-10px_rgb(16_185_129/0.6)] dark:bg-emerald-400 dark:text-emerald-950"
+                    : "border border-zinc-300 text-zinc-600 hover:border-emerald-500/50 hover:text-emerald-700 dark:border-zinc-700 dark:text-zinc-300 dark:hover:text-emerald-300"
                 }`}
               >
                 {t.id === "all" ? `全部 ${docFiles.length}` : t.label}
@@ -55,11 +64,12 @@ export function FileMatrix() {
         </div>
         <label className="relative sm:ml-auto sm:w-64">
           <span className="sr-only">搜索文件</span>
+          <MagnifyingGlassIcon size={15} weight="bold" aria-hidden className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="搜索，如 auth / rpc / ledger"
-            className="w-full rounded-xl border border-zinc-300 bg-white px-3.5 py-2 text-sm outline-none placeholder:text-zinc-500 focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:placeholder:text-zinc-400"
+            className="w-full rounded-xl border border-zinc-300 bg-white py-2 pl-10 pr-3.5 text-sm outline-none transition placeholder:text-zinc-500 focus:border-emerald-500 dark:border-zinc-700 dark:bg-zinc-900 dark:placeholder:text-zinc-400"
           />
         </label>
       </div>
@@ -81,13 +91,14 @@ export function FileMatrix() {
           {list.map((f) => (
             <li
               key={f.name}
-              className="min-w-0 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-500/40 dark:border-zinc-800 dark:bg-zinc-900/60"
+              className="card-lift group min-w-0 rounded-2xl border border-zinc-200 bg-white p-4 transition hover:border-emerald-500/40 dark:border-zinc-800 dark:bg-zinc-900/60"
             >
               <div className="flex items-center gap-2">
                 <span className="rounded-full border border-emerald-600/25 bg-emerald-500/10 px-2 py-0.5 font-mono text-[11px] text-emerald-700 dark:text-emerald-300">
                   {GROUP_LABEL[f.group]}
                 </span>
-                <code className="truncate font-mono text-[13px] font-semibold">{f.name}</code>
+                <FileIcon name={f.name} />
+                <code className="truncate font-mono text-[13px] font-semibold transition group-hover:text-emerald-700 dark:group-hover:text-emerald-300">{f.name}</code>
               </div>
               <p className="mt-2 text-sm font-medium">{f.use}</p>
               <p className="mt-0.5 text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">{f.detail}</p>

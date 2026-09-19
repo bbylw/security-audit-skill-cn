@@ -69,6 +69,8 @@ const ogImage = new URL('og.png', Astro.site).href;
     </script>
   </head>
   <body class="grain bg-zinc-50 text-zinc-900 antialiased dark:bg-zinc-950 dark:text-zinc-100">
+    <!-- 阅读进度：CSS scroll-driven，JS 不可用时静默退化为不显示 -->
+    <div aria-hidden="true" class="scroll-progress fixed inset-x-0 top-0 z-50 h-[2px] bg-gradient-to-r from-emerald-600 via-emerald-400 to-emerald-600"></div>
     <slot />
     <script is:inline>
       const toggle = document.getElementById('theme-toggle');
@@ -89,6 +91,31 @@ const ogImage = new URL('og.png', Astro.site).href;
         try { localStorage.setItem('sa-theme', dark ? 'dark' : 'light'); } catch {}
         syncTheme();
       });
+
+      // 导航当前章节高亮：IntersectionObserver，不用 scroll 监听
+      const navLinks = Array.from(document.querySelectorAll('a.nav-link[data-section]'));
+      const sections = navLinks
+        .map((a) => document.getElementById(a.getAttribute('data-section') || ''))
+        .filter((el) => el !== null);
+      if (sections.length > 0 && 'IntersectionObserver' in window) {
+        const visible = new Map();
+        const apply = () => {
+          let current = null;
+          for (const s of sections) if (visible.get(s)) current = s.id;
+          navLinks.forEach((a) => {
+            if (current && a.getAttribute('data-section') === current) a.setAttribute('aria-current', 'true');
+            else a.removeAttribute('aria-current');
+          });
+        };
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) visible.set(e.target, e.isIntersecting);
+            apply();
+          },
+          { rootMargin: '-20% 0px -65% 0px' },
+        );
+        sections.forEach((s) => io.observe(s));
+      }
     </script>
   </body>
 </html>

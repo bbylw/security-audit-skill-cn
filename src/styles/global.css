@@ -33,7 +33,79 @@ body {
   color: #022c22;
 }
 
-/* Single marquee on the page (attack-class ticker) */
+/* 全局滚动条（暗色感知） */
+html { scrollbar-color: rgba(16, 185, 129, 0.35) transparent; }
+html::-webkit-scrollbar { width: 10px; }
+html::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.3); border-radius: 99px; border: 2px solid transparent; background-clip: content-box; }
+html::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- 氛围层：网格背景 + 径向辉光 -------------------------------- */
+
+/* 细线网格：近看有质感，远看是纹理；颜色随主题翻转 */
+.bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(9 9 11 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(9 9 11 / 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+.dark .bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(250 250 250 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(250 250 250 / 0.045) 1px, transparent 1px);
+}
+
+/* 网格向上淡出，避免与内容打架 */
+.bg-grid-fade {
+  -webkit-mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 0%, black 35%, transparent 100%);
+}
+
+/* 径向辉光：单一品牌色，透明度克制 */
+.glow-emerald {
+  background: radial-gradient(closest-side, rgb(16 185 129 / 0.16), transparent);
+}
+.dark .glow-emerald {
+  background: radial-gradient(closest-side, rgb(16 185 129 / 0.12), transparent);
+}
+
+/* ---- 卡片：悬停点亮（纯 CSS，无指针监听） ---------------------- */
+
+.card-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s, box-shadow 0.35s;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .card-lift:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 0 0 rgb(16 185 129 / 0.12) inset,
+      0 12px 40px -16px rgb(16 185 129 / 0.25);
+  }
+}
+
+/* ---- 顶部阅读进度条：CSS 滚动驱动，无 JS 滚动监听 -------------- */
+
+.scroll-progress {
+  transform-origin: left;
+  transform: scaleX(0);
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: progress-grow linear both;
+    animation-timeline: scroll(root);
+  }
+}
+@keyframes progress-grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+/* ---- Marquee（页面唯一，攻击类目） ---------------------------- */
+
+.ticker-mask {
+  -webkit-mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 12%, black 88%, transparent);
+}
+
 @keyframes ticker-x {
   from { transform: translateX(0); }
   to { transform: translateX(-50%); }
@@ -42,10 +114,14 @@ body {
 .ticker-track {
   animation: ticker-x 36s linear infinite;
 }
+.ticker-track:hover {
+  animation-play-state: paused;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .ticker-track { animation: none; }
+  .scroll-progress { transform: none; }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
@@ -64,6 +140,27 @@ body {
 .code-scroll::-webkit-scrollbar { height: 8px; width: 8px; }
 .code-scroll::-webkit-scrollbar-thumb { background: rgba(16,185,129,.35); border-radius: 99px; }
 .code-scroll::-webkit-scrollbar-track { background: transparent; }
+
+/* 导航当前章节高亮（由 Layout 内联脚本的 IntersectionObserver 切换） */
+.nav-link[aria-current="true"] {
+  color: var(--color-ink);
+}
+.dark .nav-link[aria-current="true"] {
+  color: rgb(255 255 255);
+}
+.nav-link[aria-current="true"] {
+  position: relative;
+}
+.nav-link[aria-current="true"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -6px;
+  height: 2px;
+  border-radius: 99px;
+  background: #10b981;
+}
 
 /* Grain overlay: fixed, pointer-events-none only */
 .grain::after {

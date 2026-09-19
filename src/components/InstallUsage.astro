@@ -1,6 +1,7 @@
 ---
 import { InstallTabs } from './react/InstallTabs';
 import { Reveal } from './react/Reveal';
+import { ArrowRightIcon } from '@phosphor-icons/react';
 ---
 
 <section id="install" class="scroll-mt-20 border-y border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/40">
@@ -14,21 +15,21 @@ import { Reveal } from './react/Reveal';
         <div class="mt-6">
           <InstallTabs client:visible />
         </div>
-        <div class="mt-5 rounded-2xl border border-zinc-200 p-5 text-sm leading-relaxed dark:border-zinc-800">
+        <div class="card-lift mt-5 rounded-2xl border border-zinc-200 p-5 text-sm leading-relaxed dark:border-zinc-800">
           <p class="font-semibold">输出目录规则</p>
           <p class="mt-1.5 text-zinc-600 dark:text-zinc-400">未指定时默认 <code class="font-mono text-[13px] text-emerald-700 dark:text-emerald-300">~/security-audit-skill/&lt;repo-name&gt;/run-&lt;N&gt;</code>。只有当你显式选择被版本控制忽略的目录时，才会在目标仓库内写入文件。</p>
         </div>
       </Reveal>
       <Reveal client:visible delay={0.08}>
-        <h3 class="text-xl font-bold tracking-tight">三种启动说法</h3>
+        <h3 class="flex items-center gap-2 text-xl font-bold tracking-tight">三种启动说法 <ArrowRightIcon size={18} weight="bold" aria-hidden className="text-emerald-600 dark:text-emerald-400" /></h3>
         <ul class="mt-4 space-y-3">
           {[
             ['security audit this codebase', '完整审计当前代码库'],
             ['find security vulnerabilities in ./src', '聚焦 ./src 做漏洞搜寻'],
             ['do a security review, output to ~/audits/my-project', '指定输出目录的评审'],
           ].map(([cmd, desc]) => (
-            <li class="rounded-2xl border border-zinc-200 p-4 dark:border-zinc-800">
-              <code class="font-mono text-[13px] text-zinc-900 dark:text-zinc-100">“{cmd}”</code>
+            <li class="card-lift group cursor-default rounded-2xl border border-zinc-200 p-4 transition hover:border-emerald-500/40 dark:border-zinc-800">
+              <code class="font-mono text-[13px] text-zinc-900 transition group-hover:text-emerald-700 dark:text-zinc-100 dark:group-hover:text-emerald-300">“{cmd}”</code>
               <p class="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{desc}</p>
             </li>
           ))}

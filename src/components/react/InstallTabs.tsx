@@ -1,5 +1,6 @@
 "use client";
 import { useRef, useState } from "react";
+import { CheckIcon, CopyIcon } from "@phosphor-icons/react";
 
 const SNIPPETS = [
   {
@@ -54,8 +55,11 @@ export function InstallTabs() {
   };
 
   return (
-    <div className="overflow-hidden rounded-2xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-900/60">
-      <div className="flex gap-2 border-b border-zinc-200 p-3 dark:border-zinc-800" role="tablist" aria-label="安装方式" onKeyDown={onKeyDown}>
+    <div className="overflow-hidden rounded-2xl border border-zinc-950 bg-zinc-950 shadow-[0_24px_60px_-24px_rgb(16_185_129/0.4)] dark:border-zinc-800">
+      <div className="flex items-center gap-2 border-b border-zinc-800/80 px-4 py-3" role="tablist" aria-label="安装方式" onKeyDown={onKeyDown}>
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-zinc-700" />
+        <span aria-hidden="true" className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
         {SNIPPETS.map((s, i) => {
           const selected = id === s.id;
           return (
@@ -68,34 +72,38 @@ export function InstallTabs() {
               aria-controls="install-panel"
               tabIndex={selected ? 0 : -1}
               onClick={() => { setId(s.id); setCopied("idle"); }}
-              className={`rounded-full px-4 py-1.5 font-mono text-[13px] transition active:scale-[0.98] ${
+              className={`ml-1 hidden rounded-full px-3 py-1 font-mono text-xs transition active:scale-[0.98] first:ml-2 sm:inline ${
                 selected
-                  ? "bg-zinc-900 text-white dark:bg-emerald-400 dark:text-emerald-950"
-                  : "text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                  ? "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40"
+                  : "text-zinc-400 hover:text-zinc-100"
               }`}
             >
               {s.label}
             </button>
           );
         })}
+        <span className="ml-auto font-mono text-[11px] text-zinc-500">{active.label}</span>
       </div>
       <div id="install-panel" role="tabpanel" aria-labelledby={`install-tab-${active.id}`} className="code-scroll overflow-x-auto p-5">
         <pre className="font-mono text-[13px] leading-relaxed"><code>
-          <span className="text-zinc-500 dark:text-zinc-400">$ </span><span className="text-zinc-900 dark:text-zinc-100">{active.cmd}</span>
+          <span className="text-emerald-400">$ </span><span className="text-zinc-100">{active.cmd}</span>
         </code></pre>
       </div>
-      <div className="flex items-center justify-between border-t border-zinc-200 px-4 py-3 dark:border-zinc-800">
-        <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">{active.hint}</span>
+      <div className="flex items-center justify-between border-t border-zinc-800/80 px-4 py-3">
+        <span className="font-mono text-xs text-zinc-500">{active.hint}</span>
         <button
           type="button"
           onClick={copy}
           aria-live="polite"
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition active:scale-[0.98] ${
+          className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-medium transition active:scale-[0.98] ${
             copied === "fail"
-              ? "bg-amber-600 text-white dark:bg-amber-400 dark:text-amber-950"
-              : "bg-emerald-700 text-white hover:bg-emerald-800 dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300"
+              ? "bg-amber-600 text-white"
+              : copied === "ok"
+                ? "bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/40"
+                : "bg-emerald-600 text-white hover:bg-emerald-500"
           }`}
         >
+          {copied === "ok" ? <CheckIcon size={14} weight="bold" aria-hidden /> : <CopyIcon size={14} weight="bold" aria-hidden />}
           {copied === "ok" ? "已复制" : copied === "fail" ? "复制失败，请手动选择" : "复制命令"}
         </button>
       </div>

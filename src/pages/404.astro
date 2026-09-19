@@ -10,13 +10,18 @@ import Footer from '../components/Footer.astro';
   noindex
 >
   <Navbar />
-  <main class="mx-auto flex max-w-7xl flex-col items-start px-4 py-20 sm:px-6 lg:py-28">
-    <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-300">Error 404 · 未找到</p>
-    <h1 class="mt-3 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tighter md:text-5xl">没有这个页面</h1>
-    <p class="mt-4 max-w-[52ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
-      链接可能已失效，或地址打错了。本站主体只有一页，直接回首页即可。
-    </p>
-    <a href="/" class="mt-8 rounded-full bg-emerald-700 px-6 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-800 active:scale-[0.98] dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300">返回首页</a>
+  <main class="relative flex flex-col items-start overflow-hidden px-4 py-20 sm:px-6 lg:py-28">
+    <div aria-hidden="true" class="bg-grid bg-grid-fade absolute inset-0"></div>
+    <div aria-hidden="true" class="glow-emerald pointer-events-none absolute left-[10%] top-0 h-[380px] w-[380px]"></div>
+    <div class="relative mx-auto w-full max-w-7xl flex-col items-start">
+      <p class="inline-flex items-center gap-2 rounded-full border border-emerald-600/25 bg-emerald-500/[0.08] px-3 py-1 font-mono text-[11px] uppercase tracking-[0.14em] text-emerald-700 dark:text-emerald-300">Error 404 · 未找到</p>
+      <h1 class="mt-4 max-w-3xl text-4xl font-bold leading-[1.05] tracking-tighter md:text-5xl">没有这个页面</h1>
+      <p class="mt-4 max-w-[52ch] leading-relaxed text-zinc-600 dark:text-zinc-400">
+        链接可能已失效，或地址打错了。本站主体只有一页，直接回首页即可。
+      </p>
+      <pre class="code-scroll mt-6 w-full max-w-md overflow-x-auto rounded-xl bg-zinc-950 p-4 font-mono text-[12.5px] leading-relaxed text-zinc-300 shadow-[0_24px_60px_-24px_rgb(16_185_129/0.35)]"><code><span class="text-emerald-400">$</span> open --url /<br /><span class="text-zinc-500">✓ redirect → / · 200 OK</span></code></pre>
+      <a href="/" class="mt-8 rounded-full bg-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-[0_12px_36px_-12px_rgb(16_185_129/0.6)] transition hover:bg-emerald-800 active:scale-[0.98] dark:bg-emerald-400 dark:text-emerald-950 dark:hover:bg-emerald-300">返回首页</a>
+    </div>
   </main>
   <Footer />
 </Layout>
